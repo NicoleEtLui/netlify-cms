@@ -71,12 +71,16 @@ export default class RelationControl extends React.Component {
     this.didInitialSearch = false;
   }
 
+  shouldComponentUpdate() {
+    return true;
+  }
+
   componentDidMount() {
     const { value, field } = this.props;
     if (value) {
       const collection = field.get('collection');
       const searchFields = field.get('searchFields').toJS();
-      this.props.query(this.controlID, collection, searchFields, value);
+      this.props.query(this.controlID, collection, searchFields, value.trim());
     }
   }
 
@@ -113,11 +117,10 @@ export default class RelationControl extends React.Component {
   };
 
   onSuggestionsFetchRequested = debounce(({ value }) => {
-    if (value.length < 2) return;
     const { field } = this.props;
     const collection = field.get('collection');
     const searchFields = field.get('searchFields').toJS();
-    this.props.query(this.controlID, collection, searchFields, value);
+    this.props.query(this.controlID, collection, searchFields, value.trim());
   }, 500);
 
   onSuggestionsClearRequested = () => {
